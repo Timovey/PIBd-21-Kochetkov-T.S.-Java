@@ -13,7 +13,8 @@ public class CarPanel extends JPanel {
             vehicleCar.drawTransport(g);
     }
 
-    public void setVehicleCar(VehicleCar vehicleCar) {
+    public void setVehicleCar(VehicleCar vehicleCar)
+    {
         this.vehicleCar = vehicleCar;
     }
 }

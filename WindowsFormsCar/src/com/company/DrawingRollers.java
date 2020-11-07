@@ -21,17 +21,12 @@ public class DrawingRollers {
     void drawRollers(Graphics g, int _startPosX, int _startPosY) {
         g.setColor(Color.BLACK);
         switch (numRollers) {
+            case Six:
+                g.fillOval(_startPosX + 80, _startPosY + 40, 20, 20);
+            case Five:
+                g.fillOval(_startPosX + 60, _startPosY + 40, 20, 20);
             case Four:
                 g.fillOval(_startPosX + 40, _startPosY + 40, 20, 20);
-                break;
-            case Five:
-                g.fillOval(_startPosX + 40, _startPosY + 40, 20, 20);
-                g.fillOval(_startPosX + 60, _startPosY + 40, 20, 20);
-                break;
-            case Six:
-                g.fillOval(_startPosX + 40, _startPosY + 40, 20, 20);
-                g.fillOval(_startPosX + 60, _startPosY + 40, 20, 20);
-                g.fillOval(_startPosX + 80, _startPosY + 40, 20, 20);
                 break;
         }
     }
