@@ -12,8 +12,10 @@ public class Form {
     private final JButton down = new JButton();
     private final JButton left = new JButton();
     private final JButton right = new JButton();
-    private final JButton createButton = new JButton("Create");
-    private VehicleCar vehicleCar;
+    private final JButton createCarButton = new JButton("Create Car");
+    private final JButton createCrawlerCarButton = new JButton("Create Crawler Car");
+
+    private ITransport Car;
 
     /**
      * Launch the application.
@@ -38,35 +40,52 @@ public class Form {
         setupButton(down, "Down", 65, 690);
         setupButton(left, "Left", 5, 690);
         setupButton(right, "Right", 125, 690);
-        createButton.addActionListener(e -> {
-            vehicleCar = new VehicleCar(100, 1000, Color.BLUE, Color.YELLOW, true, true, true);
-            vehicleCar.setPosition(10, 10, width, height);
-            panel.setVehicleCar(vehicleCar);
+        createCarButton.addActionListener(e -> {
+            Car = new Car(100, 1000, Color.BLUE);
+            Car.setPosition(10, 10, width, height);
+            panel.setCar(Car);
             panel.repaint();
         });
-        createButton.setBounds(200, 645, 100, 50);
-        frame.getContentPane().add(createButton);
+        createCarButton.setBounds(200, 645, 100, 50);
+        frame.getContentPane().add(createCarButton);
         up.addActionListener(e -> {
-            if(vehicleCar != null){
-                vehicleCar.moveTransport(Direction.Up);
+            if(Car != null){
+                Car.moveTransport(Direction.Up);
                 panel.repaint();
             }
         });
+
+        createCrawlerCarButton.addActionListener(e -> {
+            Car = new CrawlerCar(100, 1000, Color.BLUE, Color.YELLOW, true, true, true);
+            Car.setPosition(10, 10, width, height);
+            panel.setCar(Car);
+            panel.repaint();
+        });
+        createCrawlerCarButton.setBounds(500, 645, 150, 50);
+        frame.getContentPane().add(createCrawlerCarButton);
+        up.addActionListener(e -> {
+            if(Car != null){
+                Car.moveTransport(Direction.Up);
+                panel.repaint();
+            }
+        });
+
+
         down.addActionListener(e -> {
-            if(vehicleCar != null){
-                vehicleCar.moveTransport(Direction.Down);
+            if(Car != null){
+                Car.moveTransport(Direction.Down);
                 panel.repaint();
             }
         });
         left.addActionListener(e -> {
-            if(vehicleCar != null){
-                vehicleCar.moveTransport(Direction.Left);
+            if(Car != null){
+                Car.moveTransport(Direction.Left);
                 panel.repaint();
             }
         });
         right.addActionListener(e -> {
-            if(vehicleCar != null){
-                vehicleCar.moveTransport(Direction.Right);
+            if(Car != null){
+                Car.moveTransport(Direction.Right);
                 panel.repaint();
             }
         });
@@ -75,7 +94,7 @@ public class Form {
         fourRollers.setBounds(310, 645, 50, 50);
         frame.getContentPane().add(fourRollers);
         fourRollers.addActionListener(e -> {
-            vehicleCar.drawingRollers.setConfig(4);
+            Car.drawingRollers.setConfig(4);
             panel.repaint();
         });
 
@@ -83,7 +102,7 @@ public class Form {
         fiveRollers.setBounds(370, 645, 50, 50);
         frame.getContentPane().add(fiveRollers);
         fiveRollers.addActionListener(e -> {
-            vehicleCar.drawingRollers.setConfig(5);
+            Car.drawingRollers.setConfig(5);
             panel.repaint();
         });
 
@@ -91,7 +110,7 @@ public class Form {
         sixRollers.setBounds(430, 645, 50, 50);
         frame.getContentPane().add(sixRollers);
         sixRollers.addActionListener(e -> {
-            vehicleCar.drawingRollers.setConfig(6);
+            Car.drawingRollers.setConfig(6);
             panel.repaint();
         });
     }
