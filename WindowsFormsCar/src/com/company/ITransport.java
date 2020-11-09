@@ -7,6 +7,4 @@ public interface ITransport {
     void moveTransport(Direction direction);
     void drawTransport(Graphics g);
 
-
-    DrawingRollers drawingRollers = new DrawingRollers();
 }

@@ -10,11 +10,9 @@ public class CrawlerCar extends Car {
     private boolean frontLadle;
     private boolean backAntenna;
     private boolean stand;
+    private IColoring drawingRollers;
 
-    DrawingRollers drawingRollers = new DrawingRollers();
-
-    CrawlerCar(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean frontLadle, boolean backAntenna, boolean stand)
-    {
+    CrawlerCar(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean frontLadle, boolean backAntenna, boolean stand, int numRollers, int numType) {
         super(maxSpeed, weight, mainColor, 320, 60);
         this.maxSpeed = maxSpeed;
         this.weight = weight;
@@ -23,13 +21,25 @@ public class CrawlerCar extends Car {
         this.frontLadle = frontLadle;
         this.backAntenna = backAntenna;
         this.stand = stand;
+        if (numType == 1) {
+            drawingRollers = new DrawingCircleRollers();
+        } else if (numType == 2) {
+            drawingRollers = new DrawingSquareRollers();
+        } else {
+            drawingRollers = new DrawingRollers();
+        }
+        drawingRollers.setConfig(numRollers);
+    }
+
+    public void setNumRollers(int numRollers) {
+        drawingRollers.setConfig(numRollers);
     }
 
 
     @Override
     public void drawTransport(Graphics g) {
 
-      super.drawTransport(g);
+        super.drawTransport(g);
         if (frontLadle) { // передний ковш
 
             g.setColor(dopColor);
@@ -56,6 +66,6 @@ public class CrawlerCar extends Car {
             g.drawOval(_startPosX + 60, _startPosY, 15, 10);
 
         }
-        drawingRollers.drawRollers(g, _startPosX, _startPosY);
+        drawingRollers.draw(g, _startPosX, _startPosY);
     }
 }

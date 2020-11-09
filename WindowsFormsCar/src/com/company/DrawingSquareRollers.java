@@ -2,7 +2,7 @@ package com.company;
 
 import java.awt.*;
 
-public class DrawingRollers implements IColoring {
+public class DrawingSquareRollers implements IColoring{
     private Rollers numRollers = Rollers.Four;
     @Override
     public void setConfig(int configuration) {
@@ -24,12 +24,20 @@ public class DrawingRollers implements IColoring {
         switch (numRollers) {
             case Six:
                 g.fillOval(_startPosX + 80, _startPosY + 40, 20, 20);
+                g.setColor(Color.RED);
+                g.fillRect(_startPosX + 85, _startPosY + 45, 10, 10);
+                g.setColor(Color.BLACK);
             case Five:
                 g.fillOval(_startPosX + 60, _startPosY + 40, 20, 20);
+                g.setColor(Color.RED);
+                g.fillRect(_startPosX + 65, _startPosY + 45, 10, 10);
+                g.setColor(Color.BLACK);
             case Four:
                 g.fillOval(_startPosX + 40, _startPosY + 40, 20, 20);
+                g.setColor(Color.RED);
+                g.fillRect(_startPosX + 45, _startPosY + 45, 10, 10);
+                g.setColor(Color.BLACK);
                 break;
         }
     }
-
 }

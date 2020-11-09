@@ -9,12 +9,13 @@ public class CarPanel extends JPanel {
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (iTransport != null)
+        if (iTransport != null) {
             iTransport.drawTransport(g);
+        }
+
     }
 
-    public void setCar(ITransport iTransport)
-    {
+    public void setCar(ITransport iTransport) {
         this.iTransport = iTransport;
     }
 }
