@@ -8,12 +8,15 @@ import java.io.File;
 
 public class Form {
     public JFrame frame;
+    public JFrame parent;
     private final JButton up = new JButton();
     private final JButton down = new JButton();
     private final JButton left = new JButton();
     private final JButton right = new JButton();
     private final JButton createCarButton = new JButton("Create Car");
     private final JButton createCrawlerCarButton = new JButton("Create Crawler Car");
+
+    private final CarPanel panel = new CarPanel();
 
     private ITransport Car;
     private int numRollers = 4;
@@ -22,9 +25,11 @@ public class Form {
     /**
      * Launch the application.
      */
-    Form() {
+    Form(JFrame parent) {
+        this.parent = parent;
         initialize();
     }
+
 
     private void initialize() {
         int width = 950;
@@ -33,7 +38,6 @@ public class Form {
         frame.setBounds(100, 100, 1000, 1000);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
-        CarPanel panel = new CarPanel();
         panel.setBorder(new BevelBorder(BevelBorder.LOWERED,
                 null, null, null, null));
         panel.setBounds(10, 11, width, height);
@@ -146,6 +150,14 @@ public class Form {
         rollers.addActionListener(e -> {
             numType = 0;
         });
+
+        JButton backButton = new JButton("Back");
+        backButton.setBounds(610, 710, 100, 50);
+        frame.getContentPane().add(backButton);
+        backButton.addActionListener(e -> {
+            frame.setVisible(false);
+            parent.setVisible(true);
+        });
     }
 
 
@@ -160,4 +172,13 @@ public class Form {
         button.setBounds(x, y, 50, 50);
         frame.getContentPane().add(button);
     }
+
+    public void setCar(ITransport transport, int width, int height, int pictureWidth, int pictureHeight) {
+        this.Car = transport;
+        Car.setPosition(width, height,  pictureWidth, pictureHeight);
+        panel.setCar(transport);
+        panel.repaint();
+    }
+
+
 }

@@ -7,7 +7,7 @@ public class Main {
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
             try {
-                Form window = new Form();
+                FormParking window = new FormParking();
                 window.frame.setVisible(true);
             } catch (Exception e) {
                 e.printStackTrace();
