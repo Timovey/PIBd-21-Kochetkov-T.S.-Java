@@ -4,16 +4,18 @@ import javax.swing.*;
 import java.awt.*;
 
 public class CarPanel extends JPanel {
-    private VehicleCar vehicleCar;
+    private ITransport iTransport;
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        if (vehicleCar != null)
-            vehicleCar.drawTransport(g);
+        if (iTransport != null) {
+            iTransport.drawTransport(g);
+        }
+
     }
 
-    public void setVehicleCar(VehicleCar vehicleCar) {
-        this.vehicleCar = vehicleCar;
+    public void setCar(ITransport iTransport) {
+        this.iTransport = iTransport;
     }
 }
