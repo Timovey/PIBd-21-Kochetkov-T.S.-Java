@@ -4,16 +4,16 @@ import javax.swing.*;
 import java.awt.*;
 
 public class ParkingPanel extends JPanel {
-    private final Parking<ITransport, IColoring> parking;
-
-    ParkingPanel(Parking<ITransport, IColoring> parking)
-    {
-        this.parking = parking;
-    }
+    private Parking<Vehicle, IColoring> parking;
 
     @Override
     public void paint(Graphics g) {
         super.paint(g);
-        parking.Draw(g);
+        if(parking != null) {
+            parking.Draw(g);
+        }
+    }
+    public void setParking(Parking<Vehicle, IColoring> parking) {
+        this.parking = parking;
     }
 }

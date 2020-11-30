@@ -10,31 +10,27 @@ public class Parking<T extends ITransport, E extends IColoring> {
     private int rows;
     private int _placeSizeWidth = 320;
     private int _placeSizeHeight = 80;
+    private int _maxCount;
 
     public Parking(int pictureWidth, int pictureHeight) {
         int columns = pictureWidth / _placeSizeWidth;
         rows = pictureHeight / _placeSizeHeight;
         places = new ArrayList<>();
-        for (int i = 0; i < columns * rows; i++) {
-            places.add(null);
-        }
+        _maxCount = columns * rows;
         this.pictureWidth = pictureWidth;
         this.pictureHeight = pictureHeight;
     }
 
     public boolean add(T car) {
-        for (int i = 0; i < places.size(); i++) {
-            if (places.get(i) == null) {
-                car.setPosition(i / rows * _placeSizeWidth + 10, (i - i / rows * rows) * _placeSizeHeight + 10, pictureWidth, pictureHeight);
-                places.set(i, car);
-                return true;
-            }
+        if (places.size() >= _maxCount) {
+            return false;
         }
-        return false;
+        places.add(car);
+        return true;
     }
 
     public T remove(int index) {
-        if (index < 0 || index > places.size() - 1) {
+        if (index < -1 || index > places.size() - 1) {
             return null;
         }
         T car = places.get(index);
@@ -45,11 +41,9 @@ public class Parking<T extends ITransport, E extends IColoring> {
 
     public void Draw(Graphics g) {
         DrawMarking(g);
-        for (int i = 0; i < places.size(); i++) {
-            T car = places.get(i);
-            if (car != null) {
-                car.drawTransport(g);
-            }
+        for (int i = 0; i < places.size(); ++i) {
+            places.get(i).setPosition(5 + i / 5 * _placeSizeWidth + 5, i % 5 * _placeSizeHeight + 15, pictureWidth, pictureHeight);
+            places.get(i).drawTransport(g);
         }
     }
 
@@ -65,6 +59,12 @@ public class Parking<T extends ITransport, E extends IColoring> {
         }
     }
 
+    public T get(int index) {
+        if (index < 0 || index > places.size() - 1) {
+            return null;
+        }
+        return places.get(index);
+    }
 
     public boolean equal(ITransport car) { // ==
         for (int i = 0; i < places.size(); i++) {
@@ -78,16 +78,5 @@ public class Parking<T extends ITransport, E extends IColoring> {
     public boolean unequal(ITransport car) { // !=
     return !equal(car);
     }
-
-    public int getPlaceWeight() {
-        return _placeSizeWidth;
-    }
-    public int getPlaceHeight() {
-        return _placeSizeHeight;
-    }
-    public int getRows() {
-        return rows;
-    }
-
 
 }
