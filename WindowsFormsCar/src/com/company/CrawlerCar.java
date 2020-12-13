@@ -1,7 +1,5 @@
 package com.company;
 
-import javax.swing.*;
-import javax.swing.border.BevelBorder;
 import java.awt.*;
 
 public class CrawlerCar extends Car {
@@ -35,6 +33,13 @@ public class CrawlerCar extends Car {
         drawingRollers.setConfig(numRollers);
     }
 
+    public void setDopColor(Color dopColor) {
+        this.dopColor = dopColor;
+    }
+
+    public void setDrawingRollers(IColoring iColoring) {
+        this.drawingRollers = iColoring;
+    }
 
     @Override
     public void drawTransport(Graphics g) {

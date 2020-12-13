@@ -12,7 +12,6 @@ public class CarPanel extends JPanel {
         if (iTransport != null) {
             iTransport.drawTransport(g);
         }
-
     }
 
     public void setCar(ITransport iTransport) {
