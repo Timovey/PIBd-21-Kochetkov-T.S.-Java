@@ -3,9 +3,10 @@ package com.company;
 import java.awt.*;
 
 public class Car extends Vehicle {
-
     protected int carWidth = 320;
     protected int carHeight = 60;
+    protected String separator = ";";
+
 
     public Car(int maxSpeed, float weight, Color mainColor) {
         this.maxSpeed = maxSpeed;
@@ -19,6 +20,15 @@ public class Car extends Vehicle {
         this.mainColor = mainColor;
         this.carWidth = carWidth;
         this.carHeight = carHeight;
+    }
+
+    public Car(String info) {
+        String[] strings = info.split(separator);
+        if (strings.length == 3) {
+            maxSpeed = Integer.parseInt(strings[0]);
+            weight = Float.parseFloat(strings[1]);
+            mainColor = Color.decode(strings[2]);
+        }
     }
 
     @Override
@@ -50,6 +60,11 @@ public class Car extends Vehicle {
                 }
                 break;
         }
+    }
+
+    @Override
+    public String toString() {
+        return maxSpeed + separator + weight + separator + mainColor.getRGB();
     }
 
     @Override

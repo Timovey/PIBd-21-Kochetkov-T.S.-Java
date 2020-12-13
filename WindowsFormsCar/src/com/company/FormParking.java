@@ -2,6 +2,7 @@ package com.company;
 
 import javax.swing.*;
 import java.awt.*;
+import java.io.File;
 import java.util.LinkedList;
 import javax.swing.border.BevelBorder;
 
@@ -37,6 +38,10 @@ public class FormParking {
         panel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         frame.getContentPane().add(panel);
 
+        JMenuBar menuBar = new JMenuBar();
+        menuBar.add(fileMenu());
+        frame.setJMenuBar(menuBar);
+        
         JLabel parkingLabel = new JLabel("Стоянки:");
         parkingLabel.setBounds(width + 20, 20, 100, 20);
         frame.add(parkingLabel);
@@ -188,5 +193,123 @@ public class FormParking {
         } else if (listParkingModel.size() > 0 && (index == -1 || index >= listParkingModel.size())) {
             listOfParking.setSelectedIndex(0);
         }
+    }
+
+    private JMenu fileMenu() {
+        JMenu fileMenu = new JMenu("Меню");
+        JMenuItem saveParking = new JMenuItem("Сохранить парковку");
+        fileMenu.add(saveParking);
+        JMenuItem loadParking = new JMenuItem("Загрузить парковку");
+        fileMenu.add(loadParking);
+        JMenuItem save = new JMenuItem("Сохранить");
+        fileMenu.add(save);
+        JMenuItem load = new JMenuItem("Загрузить");
+        fileMenu.add(load);
+
+
+        saveParking.addActionListener(e ->
+        {
+            String name = fileDialogSetup(true);
+            if (name == null) {
+                return;
+            }
+            name = checkTXT(name);
+            if (listOfParking.getSelectedIndex() == -1) {
+                JOptionPane.showMessageDialog(frame, "Вы не указали парковку", "Сохранение парковки", JOptionPane.ERROR_MESSAGE);
+                return;
+            }
+            else if (parkingCollection.SaveData(name , listParkingModel.get(listOfParking.getSelectedIndex()))) {
+                JOptionPane.showMessageDialog(frame, "Парковка сохранена", "Сохранение парковки", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Ошибка при сохранении", "Сохранение парковки", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        loadParking.addActionListener(e ->
+        {
+            String name = fileDialogSetup(false);
+            if (name == null) {
+                return;
+            }
+            if (parkingCollection.LoadData(name)) {
+                JOptionPane.showMessageDialog(frame, "Парковка загружена", "Загрузка парковки", JOptionPane.INFORMATION_MESSAGE);
+                listParkingModel.clear();
+                for (String key : parkingCollection.keys()) {
+                    listParkingModel.addElement(key);
+                }
+                if (listParkingModel.size() > 0) {
+                    panel.setParking(parkingCollection.get(listParkingModel.get(0)));
+                    panel.repaint();
+                }
+                panel.repaint();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Ошибка при загрузке", "Загрузка парковки", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        save.addActionListener(e ->
+        {
+            String name = fileDialogSetup(true);
+            if (name == null) {
+                return;
+            }
+            name = checkTXT(name);
+            if (parkingCollection.SaveData(name )) {
+                JOptionPane.showMessageDialog(frame, "Сохранено", "Сохранение", JOptionPane.INFORMATION_MESSAGE);
+            } else {
+                JOptionPane.showMessageDialog(frame, "Ошибка при сохранении", "Сохранение",  JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        load.addActionListener(e ->
+        {
+            String name = fileDialogSetup(false);
+            if (name == null) {
+                return;
+            }
+            if (parkingCollection.LoadAData(name,true)) {
+                JOptionPane.showMessageDialog(frame, "Загружено", "Загрузка", JOptionPane.INFORMATION_MESSAGE);
+                ReloadLevels();
+                if (listParkingModel.size() > 0) {
+                    panel.setParking(parkingCollection.get(listParkingModel.get(0)));
+                    panel.repaint();
+                }
+            } else {
+                JOptionPane.showMessageDialog(frame, "Ошибка при загрузке", "Загрузка", JOptionPane.ERROR_MESSAGE);
+            }
+        });
+
+        return fileMenu;
+    }
+
+    private String checkTXT(String name) {
+        char [] nameChars = name.toCharArray();
+        StringBuffer bf = new StringBuffer();
+        for(int i = nameChars.length - 1; i >= 0 && i >= nameChars.length - 4 ; i--) {
+            bf.append(nameChars[i]);
+        }
+        if(bf.toString().equals("txt.")) {
+            return name;
+        }
+        else {
+            return name + ".txt";
+        }
+    }
+
+    private String fileDialogSetup(boolean save) {
+        JFileChooser fileChooser = new JFileChooser();
+        int fileChooseValue;
+        if(save) {
+            fileChooseValue = fileChooser.showSaveDialog(frame);
+        }
+        else {
+            fileChooseValue = fileChooser.showOpenDialog(frame);
+        }
+
+        if (JFileChooser.APPROVE_OPTION == fileChooseValue) {
+            File file = fileChooser.getSelectedFile();
+            return file.getAbsolutePath();
+        }
+        return null;
     }
 }
