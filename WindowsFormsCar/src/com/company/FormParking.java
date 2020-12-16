@@ -8,9 +8,9 @@ import javax.swing.border.BevelBorder;
 public class FormParking {
     public JFrame frame;
     private ParkingCollection parkingCollection;
-    private final JButton parkingCarButton = new JButton("Припарковать гусенечный автомобиль");
-    private final JButton parkingCrawlerCarButton = new JButton("Припарковать экскаватор");
-    private final int numType = 0;
+    private JButton parkingCarButton = new JButton("Припарковать автомобиль");
+    private final ParkingPanel panel = new ParkingPanel();
+
 
     private JList<String> listOfParking;
     private final DefaultListModel<String> listParkingModel = new DefaultListModel<>();
@@ -32,7 +32,7 @@ public class FormParking {
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.getContentPane().setLayout(null);
         frame.setTitle("Стоянка");
-        ParkingPanel panel = new ParkingPanel();
+
         panel.setBounds(10, 11, width, height);
         panel.setBorder(new BevelBorder(BevelBorder.LOWERED));
         frame.getContentPane().add(panel);
@@ -83,8 +83,8 @@ public class FormParking {
                 }
             }
         });
-        deleteParkingButton .setBounds(width + 20, 160, 200, 20);
-        frame.add(deleteParkingButton );
+        deleteParkingButton.setBounds(width + 20, 160, 200, 20);
+        frame.add(deleteParkingButton);
 
         JButton showLastDynamicCarButton = new JButton("Забранный автомобиль");
         showLastDynamicCarButton.addActionListener(e -> {
@@ -103,48 +103,32 @@ public class FormParking {
                     exp.printStackTrace();
                     return;
                 }
-                window.setCar(dynamicParking.getLast(), 10,  10, parkingCollection.getPictureWidth(), parkingCollection.getPictureHeight());
+                window.setCar(dynamicParking.getLast(), 10, 10, parkingCollection.getPictureWidth(), parkingCollection.getPictureHeight());
                 dynamicParking.removeLast();
             });
         });
         showLastDynamicCarButton.setBounds(width + 20, 190, 200, 20);
         frame.add(showLastDynamicCarButton);
 
-        parkingCarButton.addActionListener(e -> {
-            if (listOfParking.getSelectedIndex() > -1) {
-                Color mainColor = JColorChooser.showDialog(frame, "Выберите цвет автомобиля", Color.RED);
-                if (mainColor != null) {
-                    Vehicle car = new Car(100, 1000, mainColor);
-                    if (parkingCollection.get(listParkingModel.get(listOfParking.getSelectedIndex())).add(car)) {
-                        panel.repaint();
-                    } else {
-                        JOptionPane.showMessageDialog(frame, "Стоянка переполнена", "Сообщение", JOptionPane.INFORMATION_MESSAGE);
-                    }
-                }
-                panel.repaint();
+        parkingCarButton.addActionListener(e -> EventQueue.invokeLater(() ->
+        {
+            if(parkingCollection.keys().length == 0) {
+                JOptionPane.showMessageDialog(frame, "Добавьте сначала парковку");
+                return;
             }
-        });
-        parkingCarButton.setBounds(width + 20, height  - 110, 200, 50);
+            try {
+                FormCarConfig window = new FormCarConfig(frame);
+
+                window.addEvent((vehicle) ->addCar(vehicle));
+                window.frame.setVisible(true);
+            } catch (Exception ex) {
+                ex.printStackTrace();
+            }
+        }
+        ));
+        parkingCarButton.setBounds(width + 20, height - 110, 200, 50);
         frame.getContentPane().add(parkingCarButton);
-        parkingCrawlerCarButton.addActionListener(e -> {
-            if (listOfParking.getSelectedIndex() > -1) {
-                Color mainColor = JColorChooser.showDialog(frame, "Выберите основной цвет автомобиля", Color.BLUE);
-                if (mainColor != null) {
-                    Color dopColor = JColorChooser.showDialog(frame, "Выберите доп. цвет автомобиля", Color.BLUE);
-                    if (dopColor != null) {
-                        CrawlerCar car = new CrawlerCar(100, 1000, mainColor, dopColor, true, true, true, 3, numType);
-                        if (parkingCollection.get(listParkingModel.get(listOfParking.getSelectedIndex())).add(car)) {
-                            panel.repaint();
-                        } else {
-                            JOptionPane.showMessageDialog(frame, "Парковка переполнена", "Сообщение", JOptionPane.INFORMATION_MESSAGE);
-                        }
-                    }
-                }
-                panel.repaint();
-            }
-        });
-        parkingCrawlerCarButton.setBounds(width + 20, height  - 180, 200, 50);
-        frame.getContentPane().add(parkingCrawlerCarButton);
+
         JPanel groupPanel = new JPanel(new FlowLayout(FlowLayout.CENTER, 10, 10));
         groupPanel.setBorder(BorderFactory.createTitledBorder("Забрать автомобиль"));
         groupPanel.setBounds(width + 20, height - 60, 200, 100);
@@ -180,6 +164,16 @@ public class FormParking {
         groupPanel.add(takeCar);
     }
 
+    private void addCar(Vehicle car) {
+        if (car != null && listOfParking.getSelectedIndex() > -1) {
+            if (parkingCollection.get(listParkingModel.get(listOfParking.getSelectedIndex())).add(car)) {
+                panel.repaint();
+            } else {
+                JOptionPane.showMessageDialog(frame, "Автомобиль не удалось поставить");
+            }
+        }
+    }
+
     private void ReloadLevels() {
         int index = listOfParking.getSelectedIndex();
 
@@ -191,8 +185,7 @@ public class FormParking {
 
         if (listParkingModel.size() > 0 && index > -1 && index < listParkingModel.size()) {
             listOfParking.setSelectedIndex(index);
-        }
-        else  if (listParkingModel.size() > 0 && (index == -1 || index >= listParkingModel.size())) {
+        } else if (listParkingModel.size() > 0 && (index == -1 || index >= listParkingModel.size())) {
             listOfParking.setSelectedIndex(0);
         }
     }
