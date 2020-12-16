@@ -8,26 +8,49 @@ public class CrawlerCar extends Car {
     private boolean frontLadle;
     private boolean backAntenna;
     private boolean stand;
+    private int numRollers;
+    private int numType;
     private IColoring drawingRollers;
+    static private String separator = ";";
 
     CrawlerCar(int maxSpeed, float weight, Color mainColor, Color dopColor, boolean frontLadle, boolean backAntenna, boolean stand, int numRollers, int numType) {
         super(maxSpeed, weight, mainColor, 320, 60);
-        this.maxSpeed = maxSpeed;
-        this.weight = weight;
-        this.mainColor = mainColor;
         this.dopColor = dopColor;
         this.frontLadle = frontLadle;
         this.backAntenna = backAntenna;
         this.stand = stand;
-        if (numType == 1) {
-            drawingRollers = new DrawingCircleRollers();
-        } else if (numType == 2) {
-            drawingRollers = new DrawingSquareRollers();
-        } else {
-            drawingRollers = new DrawingRollers();
-        }
+        this.numRollers = numRollers;
+        this.numType = numType;
+        drawingRollers = setIColoring(numType);
         drawingRollers.setConfig(numRollers);
     }
+
+    public CrawlerCar(String info) {
+        super(Integer.parseInt(info.split(separator)[0]), Float.parseFloat(info.split(separator)[1]), Color.decode(info.split(separator)[2]));
+
+        String[] strings = info.split(separator);
+        if (strings.length == 9) {
+            dopColor = Color.decode(strings[3]);
+            frontLadle = Boolean.parseBoolean(strings[4]);
+            backAntenna = Boolean.parseBoolean(strings[5]);
+            stand = Boolean.parseBoolean(strings[6]);
+            this.numRollers = Integer.parseInt(strings[7]);
+            this.numType = Integer.parseInt(strings[8]);
+            drawingRollers = setIColoring(numType);
+            drawingRollers.setConfig(numRollers);
+        }
+    }
+
+    public IColoring setIColoring(int numType) {
+        if (numType == 1) {
+            return new DrawingCircleRollers();
+        } else if (numType == 2) {
+            return new DrawingSquareRollers();
+        } else {
+            return new DrawingRollers();
+        }
+    }
+
 
     public void setNumRollers(int numRollers) {
         drawingRollers.setConfig(numRollers);
@@ -39,6 +62,17 @@ public class CrawlerCar extends Car {
 
     public void setDrawingRollers(IColoring iColoring) {
         this.drawingRollers = iColoring;
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + separator
+                + dopColor.getRGB() + separator
+                + frontLadle + separator
+                + backAntenna + separator
+                + stand + separator
+                + numRollers + separator
+                + numType;
     }
 
     @Override
@@ -58,12 +92,12 @@ public class CrawlerCar extends Car {
             g.fillRect(_startPosX, _startPosY, 20, 20);
         }
 
-        if (backAntenna) {
+        if (backAntenna) { // задняя антенна
             g.setColor(Color.BLACK);
             g.fillRect(_startPosX + 145, _startPosY + 40, 5, 20);
         }
 
-        if (stand) {
+        if (stand) {// мигалка
             g.setColor(dopColor);
             g.fillOval(_startPosX + 60, _startPosY, 15, 10);
 

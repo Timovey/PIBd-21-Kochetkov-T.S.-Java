@@ -59,8 +59,20 @@ public class Parking<T extends ITransport, E extends IColoring> {
         }
     }
 
+    public void clearPlaces() {
+        places.clear();
+    }
     public T get(int index) {
         if (index < 0 || index > places.size() - 1) {
+            return null;
+        }
+        return places.get(index);
+    }
+
+    public T getNext(int index)
+    {
+        if (index < 0 || index >= places.size())
+        {
             return null;
         }
         return places.get(index);
